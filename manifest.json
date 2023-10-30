@@ -1,0 +1,54 @@
+{
+   "manifest_version": 3,
+   "name": "NinjaView",
+   "background": {
+       "service_worker": "background.js"
+   },
+   "action": {
+       "default_popup": "popup.html",
+       "default_icon": {
+           "128": "128.png"
+       }
+   },
+   "content_scripts": [{
+       "js": [
+           "functions.js",
+           "ExtPay.js",
+           "main.js"
+       ],
+       "matches": [
+           "https://*.tradingview.com/*",
+           "https://*.tradovate.com/*"
+       ],
+       "run_at": "document_end"
+   }],
+   "description": "NinjaView - Seamlessly integrate your trading strategies between TradingView and NinjaTrader. Now with Trade Copier!",
+   "icons": {
+       "48": "icon.png"
+   },
+   "permissions": [
+       "activeTab",
+       "storage",
+       "identity",
+       "identity.email",
+       "webRequest",
+       "scripting"
+   ],
+   "host_permissions": [
+       "https://*.tradingview.com/*",
+       "https://*.tradovate.com/*",
+       "https://extensionpay.com/*",
+       "http://localhost:5001/",
+       "https://www.googleapis.com/*",
+       "http://ec2-3-95-19-241.compute-1.amazonaws.com:3001/",
+       "http://ec2-3-95-19-241.compute-1.amazonaws.com:3000/"
+       
+   ],
+   "version": "3.4.2",
+   "web_accessible_resources": [{
+       "resources": [
+           "content_helper.js"
+       ],
+       "matches": ["<all_urls>"]
+   }]
+}

@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help - NinjaView Autotrader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background-color: #ecf0f1;
+            color: #34495e;
+            font-family: Trebuchet, Arial, sans-serif;
+            padding: 20px;
+        }
+        nav {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #333;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        header {
+            background-color: #34495e;
+            color: #ecf0f1;
+            padding: 10px 0;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="javascript:history.back()" style="position: absolute; top: 10px; left: 10px;"> Back to previous page</a>  
+
+    <header>
+        
+        NinjaView JSON Documentation
+         
+    </header>
+    
+    <nav>
+        <a href="./Getting Started.html">How-to Get Going</a>
+        <a href="./NinjaView Pinescript Documentation.html">Pinescript Documentation</a>
+        <a href="./NinjaView JSON Documentation.html">JSON Documentation</a>
+        <a href="./NinjaView Server Documentation.html">NinjaView Server Application</a>
+        <a href="../Help.html">Help</a>
+    </nav>
+    
+       <div class="container">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li>Important Considerations</li>
+            <li>Default Values for Testing</li>
+            <li>Options</li>
+            <li>Examples</li>
+        </ol>
+
+        <section id="important-considerations">
+            <h2>Important Considerations</h2>
+            <p>While this guide provides a comprehensive overview of various order types and strategies, it is advisable to familiarize yourself with simpler order types first. Please note that TradingView, the platform that generates these alerts, is not a brokerage service. Hence, data discrepancies, such as latency or minor price feed differences, may exist when executing more complex orders in a real trading environment.</p>
+            <p>Additionally, ensure that you cross-reference the ticker symbols received from TradingView with the corresponding expiry month and year on NinjaTrader. For instance, if you are using the NQ1! symbol from TradingView, the appropriate NinjaTrader ticker would be NQ 12-23 as of the date of this guide.</p>
+        </section>
+
+        <section id="default-values">
+            <h2>Default Values for Testing</h2>
+            <ul>
+                <li><strong>Account:</strong> Sim101</li>
+                <li><strong>Ticker:</strong> NQ 12-23</li>
+                <li><strong>Quantity (qty):</strong> 1</li>
+            </ul>
+        </section>
+<section id="options">
+<h2>Options</h2>
+                  <li><strong>Account:</strong> (Required)</li>
+                <li><strong>Instrument:</strong> (Required)</li>
+                <li><strong>Action:</strong> (Required)</li>
+                <li><strong>Qty:</strong> (Required)</li>
+                <li><strong>Order Type:</strong> (Required)</li>
+                <li><strong>Limit Price:</strong> (Optional)</li>
+                <li><strong>Stop Price:</strong> (Optional)</li>
+                <li><strong>TIF:</strong> (Required)</li>
+</section>
+        <section id="examples">
+            <h2>Examples</h2>
+            <div class="example-section">
+                <h3>1. Simple Market Long</h3>
+                <div class="example">
+                    <pre>
+{
+  "alert": "Market Long",
+  "account": "Sim101",
+  "ticker": "NQ 12-23"
+}
+        </pre>
+    </div>
+
+    <h3>1.1 Simple Market Short</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Market Short",
+  "account": "Sim101",
+  "ticker": "NQ 12-23"
+}
+        </pre>
+    </div>
+
+    <h3>2. Simple Close All Positions</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Close All",
+  "account": "Sim101",
+  "ticker": "NQ 12-23"
+}
+        </pre>
+    </div>
+
+
+    <h3>3. Long with Limit Order</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Long",
+  "account": "Sim101",
+  "ticker": "NQ 12-23",
+  "qty": "1",
+  "order_type": "LIMIT",
+  "limit_price": "14000.50",
+  "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    <h3>3.1 Short with Limit Order</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Short",
+  "account": "Sim101",
+  "ticker": "NQ 12-23",
+  "qty": "1",
+  "order_type": "LIMIT",
+  "limit_price": "13900.50",
+  "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    <h3>4. Long with Stop Market Order</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Long",
+  "account": "Sim101",
+  "ticker": "NQ 12-23",
+  "qty": "1",
+  "order_type": "STOPMARKET",
+  "stop_price": "13900",
+  "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    <h3>4.1 Short with Stop Market Order</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Short",
+  "account": "Sim101",
+  "ticker": "NQ 12-23",
+  "qty": "1",
+  "order_type": "STOPMARKET",
+  "stop_price": "14000",
+  "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    <h3>5. Long with Stop Limit Order</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Long",
+  "account": "Sim101",
+  "ticker": "NQ 12-23",
+  "qty": "1",
+  "order_type": "STOPLIMIT",
+  "limit_price": "14000.50",
+  "stop_price": "13999.50",
+  "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    <h3>5.1 Short with Stop Limit Order</h3>
+    <div class="example">
+        <pre>
+{
+  "alert": "Short",
+  "account": "Sim101",
+  "ticker": "NQ 12-23",
+  "qty": "1",
+  "order_type": "STOPLIMIT",
+  "limit_price": "13900.50",
+  "stop_price": "13901.50",
+  "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    </div>
+
+    <h3>6. OCO Market Order Long</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "OCO Market Long",
+    "account": "' + str.tostring(acct) + '",
+    "ticker": "' + str.tostring(ticker) + '",
+    "qty": "' + str.tostring(qty) + '",
+    "take_profit_price": "' + str.tostring(take_profit_long) + '",
+    "stop_price": "' + str.tostring(stop_price_long) + '",
+    "tif": "DAY"
+}
+        </pre>
+    </div>
+    
+    <h3>6.1 OCO Market Order Short</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "OCO Market Short",
+    "account": "' + str.tostring(acct) + '",
+    "ticker": "' + str.tostring(ticker) + '",
+    "qty": "' + str.tostring(qty) + '",
+    "take_profit_price": "' + str.tostring(take_profit_short) + '",
+    "stop_price": "' + str.tostring(stop_price_short) + '",
+    "tif": "DAY"
+}
+        </pre>
+    </div>
+
+    <h3>7. OCO Limit Order Long</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "OCO Limit Long",
+    "account": "' + str.tostring(acct) + '",
+    "ticker": "' + str.tostring(ticker) + '",
+    "qty": "' + str.tostring(qty) + '",
+    "limit_price": "' + str.tostring(entry_limit_long) + '",
+    "take_profit_price": "' + str.tostring(take_profit_long) + '",
+    "stop_price": "' + str.tostring(stop_price_long) + '",
+    "tif": "DAY"
+}
+        </pre>
+    </div>
+    
+    <h3>7.1 OCO Limit Order Short</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "OCO Limit Short",
+    "account": "' + str.tostring(ticker) + '",
+    "ticker": "NQ 12-23",
+    "qty": "' + str.tostring(qty) + '",
+    "limit_price": "' + str.tostring(entry_limit_short) + '",
+    "take_profit_price": "' + str.tostring(take_profit_short) + '",
+    "stop_price": "' + str.tostring(stop_price_short) + '",
+    "tif": "DAY"
+}
+        </pre>
+    </div>
+    
+    <h3>8. Cancel OCO Long TP and SL / Change OCO Long TP and SL</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "Adjusted OCO Long",
+    "account": "' + str.tostring(acct) + '",
+    "ticker": "' + str.tostring(ticker) + '",
+    "qty": "' + str.tostring(qty) + '",
+    "take_profit_price": "' + str.tostring(adjusted_take_profit_long) + '",
+    "stop_price": "' + str.tostring(adjusted_stop_price_long) + '",
+    "tif": "DAY"
+}
+        </pre>
+    </div>
+    
+    <h3>8.1 Cancel OCO Short TP and SL / Change OCO Short TP and SL</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "Adjusted OCO Short",
+    "account": "' + str.tostring(acct) + '",
+    "ticker": "' + str.tostring(ticker) + '",
+    "qty": "' + str.tostring(qty) + '",
+    "take_profit_price": "' + str.tostring(adjusted_take_profit_short) + '",
+    "stop_price": "' + str.tostring(adjusted_stop_price_short) + '",
+    "tif": "DAY"
+}
+        </pre>
+    </div>
+    
+    <h3>9. Cancel All OCO Bracket's (Cancel TP's and SL's)</h3>
+    <div class="example">
+        <pre>
+{
+    "alert": "Cancel OCO"
+}
+        </pre>
+    </div>
+</body>
+</html>
+

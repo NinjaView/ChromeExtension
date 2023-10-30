@@ -1,0 +1,680 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help - NinjaView Autotrader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ <style>
+        body {
+            background-color: #ecf0f1;
+            color: #34495e;
+            font-family: Trebuchet, Arial, sans-serif;
+            padding: 20px;
+        }
+        nav {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #333;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        header {
+            background-color: #34495e;
+            color: #ecf0f1;
+            padding: 10px 0;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .centered-container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+      <a href="javascript:history.back()" style="position: absolute; top: 10px; left: 10px;"> Back to previous page</a>
+
+    <header>
+        
+        NinjaView Pinescript Documentation
+         
+    </header>
+    
+    <nav>
+        <a href="./Getting Started.html">How-to Get Going</a>
+        <a href="./NinjaView Pinescript Documentation.html">Pinescript Documentation</a>
+        <a href="./NinjaView JSON Documentation.html">JSON Documentation</a>
+        <a href="./NinjaView Server Documentation.html">NinjaView Server Application</a>
+        <a href="../Help.html">Help</a>
+    </nav>
+   <div class="container">
+        <h2>Table of Contents</h2>
+        <ol>
+            <li>Important Considerations</li>
+            <li>Default Values for Testing</li>
+            <li>Options</li>
+            <li>Examples</li>
+        </ol>
+
+        <section id="important-considerations">
+            <h2>Important Considerations</h2>
+            <p>While this guide provides a comprehensive overview of various order types and strategies, it is advisable to familiarize yourself with simpler order types first. Please note that TradingView, the platform that generates these alerts, is not a brokerage service. Hence, data discrepancies, such as latency or minor price feed differences, may exist when executing more complex orders in a real trading environment.</p>
+            <p>Additionally, ensure that you cross-reference the ticker symbols received from TradingView with the corresponding expiry month and year on NinjaTrader. For instance, if you are using the NQ1! symbol from TradingView, the appropriate NinjaTrader ticker would be NQ 12-23 as of the date of this guide.</p>
+        </section>
+<section id="options">
+<h2>Options</h2>
+                  <li><strong>Account:</strong> (Required)</li>
+                <li><strong>Instrument:</strong> (Required)</li>
+                <li><strong>Action:</strong> (Required)</li>
+                <li><strong>Qty:</strong> (Required)</li>
+                <li><strong>Order Type:</strong> (Required)</li>
+                <li><strong>Limit Price:</strong> (Optional)</li>
+                <li><strong>Stop Price:</strong> (Optional)</li>
+                <li><strong>TIF:</strong> (Required)</li>
+</section>
+        <section id="default-values">
+            <h2>Default Values for Testing</h2>
+            <ul>
+                <li><strong>Account:</strong> Sim101</li>
+                <li><strong>Ticker:</strong> NQ 12-23</li>
+                <li><strong>Quantity (qty):</strong> 1</li>
+
+            </ul>
+        </section>
+
+<section id="examples">
+  <h2>Examples</h2>
+  <div class="example-section">
+    <h3>1. Simple Market Long</h3>
+    <div class="example">
+      <h4>1.1 Pine Script Format</h4>
+      <pre>
+//@version=5
+strategy("Simple Market Long", shorttitle="SML", overlay=true)
+
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+MarketLong = '{ "alert": "Market Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+if (longCondition)
+  strategy.entry("Long", strategy.long, alert_message = MarketLong)
+  strategy.exit("Long Exit", from_entry="Long", profit=10, loss=10, alert_message = CloseAll)
+      </pre>
+    </div>
+  </div>
+</section>
+
+
+    <h3>1.1 Simple Market Short</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Simple Market Short", shorttitle="SMS", overlay=true)
+
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+MarketShort = '{ "alert": "Market Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+if (shortCondition)
+    strategy.entry("Short", strategy.short, alert_message = MarketShort)
+    strategy.exit("Short Exit", from_entry="Short", profit=10, loss=10, alert_message = CloseAll)
+
+        </pre>
+    </div>
+
+    <h3>2. Simple Close All Positions</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Close All Positions Example", shorttitle="CAE", overlay=true)
+
+closeAllCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+if (closeAllCondition)
+    strategy.close_all(alert_message = CloseAll)
+
+        </pre>
+    </div>
+
+
+    <h3>3. Long with Limit Order</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Long with Limit Order", shorttitle="LLO", overlay=true)
+
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+limit_long_price = close - 5
+LimitLong = '{ "alert": "LimitLong", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "limit_price": "' + str.tostring(limit_long_price) + '", "tif": "DAY" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+if (longCondition)
+    strategy.entry("Long", strategy.long, limit=limit_price, alert_message = LimitLong)
+    strategy.exit("Long Exit", from_entry="Long", profit=10, loss=10, alert_message = CloseAll)
+
+        </pre>
+    </div>
+
+    <h3>3.1 Short with Limit Order</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Short with Limit Order", shorttitle="SLO", overlay=true)
+
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+limit_short_price = close + 5
+
+LimitShort = '{ "alert": "LimitShort", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "order_type": "LIMIT", "limit_price": "' + str.tostring(limit_short_price) + '", "tif": "DAY" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+if (shortCondition)
+    strategy.entry("Short", strategy.short, limit=limit_price, alert_message = LimitShort)
+    strategy.exit("Short Exit", from_entry="Short", profit=10, loss=10, alert_message = CloseAll)
+
+        </pre>
+    </div>
+
+    <h3>4. Long with Stop Market Order</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Long with Stop Market Order", shorttitle="LSMO", overlay=true)
+
+var float entryPrice = na
+var float stopPrice = na
+
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+LongStopMarket = '{ "alert": "Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "order_type": "STOPMARKET", "stop_price": "' + str.tostring(stopPrice) + '", "tif": "DAY" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+
+if (longCondition)
+    entryPrice := close
+    stopPrice := entryPrice - 10
+    strategy.entry("Long", strategy.long, alert_message = LongStopMarket)
+
+
+if (na(stopPrice) == false) and (low <= stopPrice)
+    strategy.close("Long", alert_message = CloseAll)
+    entryPrice := na
+    stopPrice := na
+
+
+        </pre>
+    </div>
+
+    <h3>4.1 Short with Stop Market Order</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Short with Stop Market Order", shorttitle="SSMO", overlay=true)
+
+var float entryPrice = na
+var float stopPrice = na
+
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+ShortStopMarket = '{ "alert": "Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "order_type": "STOPMARKET", "stop_price": "' + str.tostring(Market_Short_stopPrice) + '", "tif": "DAY" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+
+if (shortCondition)
+    entryPrice := close
+    stopPrice := entryPrice + 10
+    strategy.entry("Short", strategy.short, alert_message = ShortStopMarket)
+
+
+if (na(stopPrice) == false) and (high >= stopPrice)
+    strategy.close("Short", alert_message = CloseAll)
+    entryPrice := na
+    stopPrice := na
+
+
+        </pre>
+    </div>
+
+    <h3>5. Long with Stop Limit Order</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Long with Stop Limit Order", shorttitle="LSLO", overlay=true)
+
+var float entryPrice = na
+var float stopPrice_Long = na
+var float limitPrice_Long = na
+
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+LongStopLimit = '{ "alert": "Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "order_type": "STOPLIMIT", "limit_price": "' + str.tostring(limitPrice_Long) + '", "stop_price": "' + str.tostring(stopPrice_Long) + '", "tif": "DAY" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+
+if (longCondition)
+    entryPrice := close
+    stopPrice_Long := entryPrice - 5
+    limitPrice_Long := stopPrice_Long - 1
+    strategy.entry("Long", strategy.long, alert_message = LongStopLimit)
+    strategy.exit("Long Exit", from_entry="Long", limit=limitPrice_Long, stop=stopPrice_Long, alert_message=CloseAll)
+
+
+        </pre>
+    </div>
+
+    <h3>5.1 Short with Stop Limit Order</h3>
+    <div class="example">
+        <pre>
+//@version=5
+strategy("Short with Stop Limit Order", shorttitle="SSLO", overlay=true)
+
+var float entryPrice = na
+var float stopPrice_Short = na
+var float limitPrice_Short = na
+
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+
+acct = "Sim101"
+ticker = "NQ 12-23"
+qty = 1
+
+ShortStopLimit = '{ "alert": "Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "order_type": "STOPLIMIT", "limit_price": "' + str.tostring(limitPrice_Short) + '", "stop_price": "' + str.tostring(stopPrice_Short) + '", "tif": "DAY" }'
+CloseAll = '{ "alert": "Close All", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '" }'
+    
+
+if (shortCondition)
+    entryPrice := close
+    stopPrice_Short := entryPrice + 5
+    limitPrice_Short := stopPrice_Short + 1
+    strategy.entry("Short", strategy.short, alert_message = ShortStopLimit)
+    strategy.exit("Short Exit", from_entry="Short", limit=limitPrice_Short, stop=stopPrice_Short, alert_message=CloseAll)
+
+        </pre>
+    </div>
+
+<h3>6.1 OCO Market Order Long</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("OCO Market Order Long Example", shorttitle="OCOMOL", overlay=true)
+
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Storing the entry price for calculating take profit and stop loss levels
+var float entryPrice = na
+
+// Setting the initial take profit and stop loss prices to Not-a-Number
+var float takeProfitPrice = na
+var float stopLossPrice = na
+
+// Condition to enter a long trade
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+// Exiting the trade based on take profit or stop loss
+exitCondition = (close > takeProfitPrice) or (close < stopLossPrice)
+
+if (longCondition)
+    entryPrice := close
+    takeProfitPrice := entryPrice + 10 // Example: setting take profit level 10 points above entry
+    stopLossPrice := entryPrice - 10  // Example: setting stop loss level 10 points below entry
+    // Constructing the JSON alert for the OCO Market Long order
+    OCOMarketLong = '{ "alert": "OCO Market Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "take_profit_price": "' + str.tostring(takeProfitPrice) + '", "stop_price": "' + str.tostring(stopLossPrice) + '", "tif": "DAY" }'
+    // Entering the long position
+    strategy.entry("Long", strategy.long, qty=qty, alert_message = OCOMarketLong)
+    tradeDirection := 1
+
+if (exitCondition and tradeDirection == 1)
+    // Closing the long position
+    strategy.close("Long", qty=qty)
+    // Resetting trade direction
+    tradeDirection := 0
+    // Resetting entry price, take profit, and stop loss prices
+    entryPrice := na
+    takeProfitPrice := na
+    stopLossPrice := na
+
+    </pre>
+</div>
+
+
+    </div>
+    
+<h3>6.1 OCO Market Order Short</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("OCO Market Order Short Example", shorttitle="OCOMOS", overlay=true)
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Storing the entry price for calculating take profit and stop loss levels
+var float entryPrice = na
+
+// Setting the initial take profit and stop loss prices to Not-a-Number
+var float takeProfitPrice = na
+var float stopLossPrice = na
+
+// Condition to enter a short trade
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+// Exiting the trade based on take profit or stop loss
+exitCondition = (close < takeProfitPrice) or (close > stopLossPrice)
+
+if (shortCondition)
+entryPrice := close
+takeProfitPrice := entryPrice - 10 // Example: setting take profit level 10 points below entry
+stopLossPrice := entryPrice + 10 // Example: setting stop loss level 10 points above entry
+// Constructing the JSON alert for the OCO Market Short order
+OCOMarketShort = '{ "alert": "OCO Market Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "take_profit_price": "' + str.tostring(takeProfitPrice) + '", "stop_price": "' + str.tostring(stopLossPrice) + '", "tif": "DAY" }'
+// Entering the short position
+strategy.entry("Short", strategy.short, qty=qty, alert_message = OCOMarketShort)
+tradeDirection := -1
+
+if (exitCondition and tradeDirection == -1)
+// Closing the short position
+strategy.close("Short", qty=qty)
+// Resetting trade direction
+tradeDirection := 0
+// Resetting entry price, take profit, and stop loss prices
+entryPrice := na
+takeProfitPrice := na
+stopLossPrice := na
+</pre>
+</div>
+
+<h3>7. OCO Limit Order Long</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("OCO Limit Order Long Example", shorttitle="OCOLOL", overlay=true)
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Storing the entry price for calculating take profit and stop loss levels
+var float entryPrice = na
+
+// Setting the initial take profit and stop loss prices to Not-a-Number
+var float takeProfitPrice = na
+var float stopLossPrice = na
+var float entryLimitLong = na
+
+// Condition to enter a long trade
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+// Exiting the trade based on take profit or stop loss
+exitCondition = (close > takeProfitPrice) or (close < stopLossPrice)
+
+if (longCondition)
+entryLimitLong := close + 5 // Example: setting limit order 5 points above current price
+entryPrice := entryLimitLong
+takeProfitPrice := entryPrice + 10 // Example: setting take profit level 10 points above entry
+stopLossPrice := entryPrice - 10 // Example: setting stop loss level 10 points below entry
+// Constructing the JSON alert for the OCO Limit Long order
+OCOLimitLong = '{ "alert": "OCO Limit Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "limit_price": "' + str.tostring(entryLimitLong) + '", "take_profit_price": "' + str.tostring(takeProfitPrice) + '", "stop_price": "' + str.tostring(stopLossPrice) + '", "tif": "DAY" }'
+// Entering the long position
+strategy.entry("Long", strategy.long, qty=qty, limit=entryLimitLong, alert_message = OCOLimitLong)
+tradeDirection := 1
+
+if (exitCondition and tradeDirection == 1)
+// Closing the long position
+strategy.close("Long", qty=qty)
+// Resetting trade direction
+tradeDirection := 0
+// Resetting entry price, take profit, and stop loss prices
+entryPrice := na
+takeProfitPrice := na
+stopLossPrice := na
+
+</pre>
+
+</div>
+
+<h3>7.1 OCO Limit Order Short</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("OCO Limit Order Short Example", shorttitle="OCOLOS", overlay=true)
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Storing the entry price for calculating take profit and stop loss levels
+var float entryPrice = na
+
+// Setting the initial take profit and stop loss prices to Not-a-Number
+var float takeProfitPrice = na
+var float stopLossPrice = na
+var float entryLimitShort = na
+
+// Condition to enter a short trade
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+// Exiting the trade based on take profit or stop loss
+exitCondition = (close < takeProfitPrice) or (close > stopLossPrice)
+
+if (shortCondition)
+entryLimitShort := close - 5 // Example: setting limit order 5 points below current price
+entryPrice := entryLimitShort
+takeProfitPrice := entryPrice - 10 // Example: setting take profit level 10 points below entry
+stopLossPrice := entryPrice + 10 // Example: setting stop loss level 10 points above entry
+// Constructing the JSON alert for the OCO Limit Short order
+OCOLimitShort = '{ "alert": "OCO Limit Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "limit_price": "' + str.tostring(entryLimitShort) + '", "take_profit_price": "' + str.tostring(takeProfitPrice) + '", "stop_price": "' + str.tostring(stopLossPrice) + '", "tif": "DAY" }'
+// Entering the short position
+strategy.entry("Short", strategy.short, qty=qty, limit=entryLimitShort, alert_message = OCOLimitShort)
+tradeDirection := -1
+
+if (exitCondition and tradeDirection == -1)
+// Closing the short position
+strategy.close("Short", qty=qty)
+// Resetting trade direction
+tradeDirection := 0
+// Resetting entry price, take profit, and stop loss prices
+entryPrice := na
+takeProfitPrice := na
+stopLossPrice := na
+
+</pre>
+
+</div>
+
+<h3>8. Cancel OCO Long TP and SL / Change OCO Long TP and SL</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("Adjust OCO Long TP and SL", shorttitle="AOCOLTS", overlay=true)
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Storing the entry price for calculating take profit and stop loss levels
+var float entryPrice = na
+
+// Setting the initial take profit and stop loss prices to Not-a-Number
+var float takeProfitPrice = na
+var float stopLossPrice = na
+var float adjustedTakeProfitLong = na
+var float adjustedStopPriceLong = na
+
+// Conditions to enter and exit the trade
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+adjustCondition = ta.crossover(ta.sma(close, 7), ta.sma(close, 14))
+
+if (longCondition)
+entryPrice := close
+takeProfitPrice := entryPrice + 10 // Example: setting take profit level 10 points above entry
+stopLossPrice := entryPrice - 10 // Example: setting stop loss level 10 points below entry
+// Constructing the JSON alert for the initial OCO Long order
+OCOLong = '{ "alert": "OCO Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "take_profit_price": "' + str.tostring(takeProfitPrice) + '", "stop_price": "' + str.tostring(stopLossPrice) + '", "tif": "DAY" }'
+// Entering the long position
+strategy.entry("Long", strategy.long, qty=qty, alert_message = OCOLong)
+tradeDirection := 1
+
+if (adjustCondition and tradeDirection == 1)
+// Adjusting take profit and stop loss levels
+adjustedTakeProfitLong := close + 15 // Example: adjusting take profit level to 15 points above current price
+adjustedStopPriceLong := close - 5 // Example: adjusting stop loss level to 5 points below current price
+// Constructing the JSON alert for the adjusted OCO Long order
+adjustedOCOLong = '{ "alert": "Adjusted OCO Long", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "take_profit_price": "' + str.tostring(adjustedTakeProfitLong) + '", "stop_price": "' + str.tostring(adjustedStopPriceLong) + '", "tif": "DAY" }'
+// Updating the long position
+strategy.exit("Adjust Long TP and SL", "Long", qty=qty, limit=adjustedTakeProfitLong, stop=adjustedStopPriceLong, alert_message=adjustedOCOLong)
+
+</pre>
+</div>
+<h3>8.1 Cancel OCO Short TP and SL / Change OCO Short TP and SL</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("Adjust OCO Short TP and SL", shorttitle="AOCOSTS", overlay=true)
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Storing the entry price for calculating take profit and stop loss levels
+var float entryPrice = na
+
+// Setting the initial take profit and stop loss prices to Not-a-Number
+var float takeProfitPrice = na
+var float stopLossPrice = na
+var float adjustedTakeProfitShort = na
+var float adjustedStopPriceShort = na
+
+// Conditions to enter and exit the trade
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+adjustCondition = ta.crossunder(ta.sma(close, 7), ta.sma(close, 14))
+
+if (shortCondition)
+entryPrice := close
+takeProfitPrice := entryPrice - 10 // Example: setting take profit level 10 points below entry
+stopLossPrice := entryPrice + 10 // Example: setting stop loss level 10 points above entry
+// Constructing the JSON alert for the initial OCO Short order
+OCOShort = '{ "alert": "OCO Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "take_profit_price": "' + str.tostring(takeProfitPrice) + '", "stop_price": "' + str.tostring(stopLossPrice) + '", "tif": "DAY" }'
+// Entering the short position
+strategy.entry("Short", strategy.short, qty=qty, alert_message = OCOShort)
+tradeDirection := -1
+
+if (adjustCondition and tradeDirection == -1)
+// Adjusting take profit and stop loss levels
+adjustedTakeProfitShort := close - 15 // Example: adjusting take profit level to 15 points below current price
+adjustedStopPriceShort := close + 5 // Example: adjusting stop loss level to 5 points above current price
+// Constructing the JSON alert for the adjusted OCO Short order
+adjustedOCOShort = '{ "alert": "Adjusted OCO Short", "account": "' + str.tostring(acct) + '", "ticker": "' + str.tostring(ticker) + '", "qty": "' + str.tostring(qty) + '", "take_profit_price": "' + str.tostring(adjustedTakeProfitShort) + '", "stop_price": "' + str.tostring(adjustedStopPriceShort) + '", "tif": "DAY" }'
+// Updating the short position
+strategy.exit("Adjust Short TP and SL", "Short", qty=qty, limit=adjustedTakeProfitShort, stop=adjustedStopPriceShort, alert_message=adjustedOCOShort)
+
+</pre>
+
+</div>
+
+<h3>9. Cancel All OCO Bracket's (Cancel TP's and SL's)</h3>
+<div class="example">
+    <pre>
+//@version=5
+strategy("Cancel All OCO Brackets", shorttitle="CAOCOB", overlay=true)
+// Input fields for account details and quantity
+acct = input("Sim101", title="Account")
+ticker = input("NQ 12-23", title="Ticker")
+qty = input(1, title="Quantity")
+
+// Tracking the trade direction, where 1 is long, -1 is short, and 0 is flat
+var int tradeDirection = 0
+
+// Conditions to enter, exit, and adjust the trade
+longCondition = ta.crossover(ta.sma(close, 14), ta.sma(close, 28))
+shortCondition = ta.crossunder(ta.sma(close, 14), ta.sma(close, 28))
+cancelOCOCondition = ta.crossover(ta.sma(close, 7), ta.sma(close, 14))
+
+// Constructing the JSON alert for cancelling all OCO brackets
+cancelOCO = '{ "alert": "Cancel OCO" }'
+
+if (longCondition)
+// Entering a long position
+strategy.entry("Long", strategy.long, qty=qty)
+tradeDirection := 1
+
+if (shortCondition)
+// Entering a short position
+strategy.entry("Short", strategy.short, qty=qty)
+tradeDirection := -1
+
+if (cancelOCOCondition)
+// Cancelling all OCO brackets
+strategy.close("Long", alert_message=cancelOCO)
+strategy.close("Short", alert_message=cancelOCO)
+tradeDirection := 0
+
+plotshape(series=longCondition, title="Buy Signal", location=location.belowbar, color=color.green, style=shape.labelup, text="Buy")
+plotshape(series=shortCondition, title="Sell Signal", location=location.abovebar, color=color.red, style=shape.labeldown, text="Sell")
+plotshape(series=cancelOCOCondition, title="Cancel OCO Signal", location=location.abovebar, color=color.purple, style=shape.labeldown, text="Cancel OCO")
+</pre>
+
+</div>
+</body>
+</html>

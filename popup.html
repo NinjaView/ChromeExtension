@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../ExtPay.js"></script>
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>NinjaView</title>
+</head>
+ <style>
+    .hidden {
+        display: none !important;
+    }
+body {
+    width: 200px !important; 
+    background-color: #ecf0f1;
+    color: #34495e;
+    font-family: Trebuchet, Arial, sans-serif;
+    text-align: center;
+    padding: 1px;
+}
+
+header {
+    background-color: #34495e;
+    color: #ecf0f1;
+    padding: 10px 0; 
+    font-size: 1.5em; /* Make the font size larger for headers */
+    margin-bottom: 15px; /* Space below the header */
+}
+
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-bottom: .1px solid #949aff94;
+}
+
+.col {
+    flex: 1;
+    padding: 5px;
+}
+
+.col1, .col4 {
+    text-align: left;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 30px !important;  
+    height: 15px !important;  
+    vertical-align: middle;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 15px !important;  
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px !important;
+    width: 12px !important;
+    left: 2px;
+    bottom: 1.5px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50% !important;  
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(15px) !important;  
+}
+
+.success {
+    color: rgba(78, 157, 78, 0.8) !important;
+}
+
+.danger {
+    color: rgba(190, 76, 73, 0.8) !important;
+}
+
+</style>
+
+    <h2>NinjaView Extension</h2>
+    <h3>Manual Settings</h3>
+<label for="accountInput">Account:</label>
+<input type="text" id="accountInput" placeholder="Enter Account" value="Sim101" >
+
+<label for="tickerInput">Ticker:</label>
+<input type="text" id="tickerInput" placeholder="Enter Ticker" value="NQ 12-23" >
+<label for="qtyInput">Quantity:</label>
+<input type="text" id="qtyInput" placeholder="Quantity" value="1">
+
+    <button id="saveSettings">Save Settings</button>
+    
+
+    <h3>Trade Modes</h3>
+
+
+    <label>Webhook:</label>
+    <label class="toggle-switch">
+        <input type="checkbox" id="webhook">
+        <span class="slider round"></span>
+    </label>
+</br>
+
+<label>Auto-Trade:</label>
+<label class="toggle-switch">
+    <input type="checkbox" id="autoTrade2">
+    <span class="slider round"></span>
+</label>
+    <br>
+
+
+    <label>Manual-Trade:</label>
+    <label class="toggle-switch">
+        <input type="checkbox" id="manualTrade">
+        <span class="slider round"></span>
+    </label>
+
+
+    <h3>Test Alerts</h3>
+    <button id="marketLong">Market Long</button>
+    <button id="marketShort">Market Short</button>
+<br>
+<button id="marketClose" style="width: 185px; height: 25px;">Market Close</button>
+<a href="https://ninja-view.com/" target="_blank" id="Webutton">Website</a>
+<br>
+<a href="help.html" target="_blank" id="helpButton">Help</a>
+
+
+<body>
+<label class="pure-material-switch hidden">
+    <input type="checkbox" id="toggle_debug">
+    <span>Debug</span>
+</label>
+    <h3>Gmail & TV Account</h3>
+<label id="autoTradeLabel">
+    <input type="checkbox" id="autoTrade">
+    Please consider paying for the extension.
+</label>
+
+
+    <section>
+    <div id="chrome-account" class="row">
+
+        <div class="col4" id="chrome-account-email">Sign in to Chrome</div>
+        <div class="col danger" id="chrome-account-status" style="font-weight:bold">X</div>
+    </div>
+    <div id="tradingview-account" class="row">
+        <div class="col4" id="trdvw_user_name" style="flex:3">
+            Refresh page while on Tradingview
+        </div>
+        <div class="col danger" id="tradingview-account-status" style="font-weight:bold">X</div>
+    </div>
+    </section>
+<script src="functions.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
+

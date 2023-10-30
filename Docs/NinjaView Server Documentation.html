@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Help - NinjaView Autotrader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ <style>
+        body {
+            background-color: #ecf0f1;
+            color: #34495e;
+            font-family: Trebuchet, Arial, sans-serif;
+            padding: 20px;
+        }
+        nav {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #333;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        header {
+            background-color: #34495e;
+            color: #ecf0f1;
+            padding: 10px 0;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .centered-container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+   <a href="javascript:history.back()" style="position: absolute; top: 10px; left: 10px;"> Back to previous page</a>
+
+    <header>
+        
+        NinjaView Server Documentation
+         
+    </header>
+    
+    <nav>
+        <a href="./Getting Started.html">How-to Get Going</a>
+        <a href="./NinjaView Pinescript Documentation.html">Pinescript Documentation</a>
+        <a href="./NinjaView JSON Documentation.html">JSON Documentation</a>
+        <a href="./NinjaView Server Documentation.html">NinjaView Server Application</a>
+        <a href="../Help.html">Help</a>
+    </nav>
+      <div class="container">
+
+<h2>Introduction:</h2>
+<p>NinjaView is a versatile Python application that allows you to interact with NinjaTrader software through webhooks and automate trading actions. It provides integration with ngrok for creating secure tunnels to expose your local server to the internet. This guide will walk you through the various features and setup procedures.</p>
+    <h3>Features</h3>
+    <ul>
+        <li>A user-friendly interface with system tray icons.</li>
+        <li>Exposing local servers through ngrok for webhooks.</li>
+        <li>IP Restriction for security</li>
+        <li>Flexible Order Types</li>
+        <li>Logging and Error Handling</li>
+    </ul>
+
+    <h3>IP Restriction</h3>
+    <p>The server uses an IP restriction feature to ensure that only authorized servers can send alerts. The enabling of Tradingview to access the server is not neccessary for the "Auto-Trade" feature but is used for the "Webhook" feature. Authorized IP's :</p>
+    <code>
+        ["52.89.214.238", "34.212.75.30", "54.218.53.128", "52.32.178.7", "192.168.1.1", "127.0.0.1"]
+    </code>
+
+    <h3>Order Types</h3>
+    <p>The server supports multiple types of TradingView alerts and converts them into appropriate NinjaTrader 8 order instructions.</p>
+    <ul>
+        <li><strong>Simple Market Long:</strong> Place a market buy order.</li>
+        <li><strong>Simple Market Short:</strong> Place a market sell order.</li>
+        <li><strong>Simple Close All Positions:</strong> Close all existing positions for a specific asset.</li>
+        <li><strong>Long with Limit Order:</strong> Place a buy limit order.</li>
+        <li><strong>Short with Limit Order:</strong> Place a sell limit order.</li>
+        <li><strong>Long with Stop Market Order:</strong> Place a buy stop market order.</li>
+        <li><strong>Short with Stop Market Order:</strong> Place a sell stop market order.</li>
+        <li><strong>Long with Stop Limit Order:</strong> Place a buy stop limit order.</li>
+        <li><strong>Short with Stop Limit Order:</strong> Place a sell stop limit order.</li>
+        <li><strong>OCO Market Order Long:</strong> Place a One-Cancels-the-Other market buy order.</li>
+        <li><strong>OCO Market Order Short:</strong> Place a One-Cancels-the-Other market sell order.</li>
+        <li><strong>OCO Limit Order Long:</strong> Place a One-Cancels-the-Other buy limit order.</li>
+        <li><strong>OCO Limit Order Short:</strong> Place a One-Cancels-the-Other sell limit order.</li>
+        <li><strong>Cancel/Change OCO Long TP and SL:</strong> Cancel or adjust the take profit (TP) and stop loss (SL) for a long OCO order.</li>
+        <li><strong>Cancel/Change OCO Short TP and SL:</strong> Cancel or adjust the take profit (TP) and stop loss (SL) for a short OCO order.</li>
+        <li><strong>Cancel All OCO Brackets:</strong> Cancel all take profits (TPs) and stop losses (SLs) for OCO orders.</li>
+    </ul>
+
+
+<h2>Requirements:</h2>
+<p>NinjaTrader software installed and running on your computer.</p>
+<p>An ngrok account (if you plan to use ngrok for webhooks).</p>
+
+<h2>Activate the Application:</h2>
+<p>When you run NinjaView for the first time, it will prompt you to activate the application.</p>
+<p>You will need to enter an activation key provided to you. If an activation key has not been provided, please email tradingakamai@gmail.com with your Serial.</p>
+
+<h2>Configure ngrok:</h2>
+<p>Create an ngrok account by visiting the ngrok website.</p>
+<p>If using a "Paid" Ngrok Account. Obtain your ngrok API token.</p>
+<p>To load your ngrok account details, open the config.txt file and add the following:</p>
+<pre>ngrokAUTHTOKEN=Default(Default is for free ngrok. For paid ngrok you would include your actual AUTHTOKEN)
+ngrokDOMAIN=example-ngrok-domain.ngrok-free.app
+ngrokLOCATION=C:\Users\YOURUSERNAME\Desktop\Ngrok.exe</pre>
+
+<h2>Application Buttons:</h2>
+<p>The NinjaView application includes several buttons in its system tray menu:</p>
+<ul>
+    <li>Activated/Not Activated: Indicates whether the application is activated.</li>
+    <li>Start Extension: Starts the NinjaView server for webhook integration.</li>
+    <li>Start Ngrok Webhook: Starts ngrok to expose the server to the internet.</li>
+    <li>Shutdown: Closes the application.</li>
+</ul>
+
+
+<h2>Configuring config.txt</h2>
+<p>The config.txt file in the application folder allows you to configure various settings. Here are the variables you can include:</p>
+<ul>
+<li>activationCode=<code>'00000000'</code></li>
+<li>ngrokAUTHTOKEN=<code>'Default'</code></li>
+<li>ngrokDOMAIN=<code>'Your ngrok domain ("myapp.ngrok.io").'</code></li>
+<li>ngrokLOCATION=<code>'File path to the ngrok executable.'</code></li>
+<li>userEmail=<code>'Your email address used for NinjaView access.'</code></li>
+<p>
+(ngrokAUTHTOKEN=Default is for free ngrok. For paid ngrok you would include your actual AUTHTOKEN)
+</P
+</p>
+</ul>
+
+
+
+<h2>Troubleshooting:</h2>
+<p>Errors and other important information are logged for better traceability and debugging. If you encounter any issues with NinjaView, refer to the application logs (e.g., logfile.txt) for error messages and helpful information.</p>
+
+
+
+
+
+
+    <h2>Contact</h2>
+    <p>For any questions or issues, please contact the development team.</p>
+
+</body>
+</html>
