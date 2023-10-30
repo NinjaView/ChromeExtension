@@ -181,6 +181,17 @@ const xhrWithAuth = (method, url, callback) => {
     }
 };
 
+
+//
+//
+// 'ViewSteam' Was the old method to capture tradingview alerts through pushstream on tradingview. This was discontinued with Googles update to manifest v3.
+//  Now the only way to capture pushstream alerts is by utilizing a proxy as listed below under the 'createSocket' funciton. This feature has been disabled.
+//  Due to sometimes being slow because of traval time to the proxy. Now the extension's sole purpose is for manual-trading.
+
+
+
+
+
 const ViewStream = () => {
     const fixTVOrigin = details => {
         if (!details || !details.initiator || !details.initiator.includes(chrome.runtime.id)) {
