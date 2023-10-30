@@ -1,7 +1,3 @@
-importScripts('ExtPay.js')
-var extpay = new ExtPay('ninjaviewbeta');
-extpay.startBackground();
-
 let ws;
 
 //added
