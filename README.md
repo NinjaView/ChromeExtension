@@ -29,12 +29,12 @@ const ViewStream = () => {
 
 ViewStream();
 ```
-
+```
 // 'ViewSteam' Was the old method to capture tradingview alerts through pushstream on tradingview used by both Autoview and other extensions. This was discontinued with Googles update to manifest v3.
 //  The reason it still works for Autoview and the other guys is they are grandfathered in. Now the only way to capture pushstream alerts is by utilizing a proxy as listed below under the 'createSocket' funciton. This feature has been disabled.
 //  Due to sometimes being slow because of traval time to the proxy. Now the extension's sole purpose is for manual-trading. The proxy we setup on AWS is secure and serverless meaning NO DATA is captured or stored. But that has been disabled.
 //  You are more then welcome to experiment with it and use the proxy we setup for experimintation
-
+```
 The newer method that was recently disabled 
 
 ```
