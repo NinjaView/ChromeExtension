@@ -1,4 +1,3 @@
-const extpay = new ExtPay('ninjaviewbeta');
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeCheckbox('manualTrade');
